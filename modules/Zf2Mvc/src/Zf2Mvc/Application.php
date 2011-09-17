@@ -260,11 +260,16 @@ class Application implements AppContext
             return $result->last();
         }
 
+        $moduleName     = $routeMatch->getParam('module', null);
         $controllerName = $routeMatch->getParam('controller', 'not-found');
         $locator        = $this->getLocator();
 
         try {
-            $controller = $locator->get($controllerName);
+        	if (!empty($moduleName)) {
+        		$controller = $locator->get($moduleName . '_' . $controllerName);
+        	} else {
+            	$controller = $locator->get($controllerName);
+        	}
         } catch (ClassNotFoundException $e) {
             $errorParams = array(
                 'error'       => static::ERROR_CONTROLLER_NOT_FOUND,
