@@ -216,11 +216,13 @@ class Module implements Route
             if (is_array($value)) {
                 foreach ($value as $arrayValue) {
                     $arrayValue = (isset($options['encode'])) ? urlencode($arrayValue) : $arrayValue;
+                    if (empty($arrayValue)) continue;
                     $url .= '/' . $key;
                     $url .= '/' . $arrayValue;
                 }
             } else {
                 if (isset($options['encode'])) $value = urlencode($value);
+                if (empty($value)) continue;
                 $url .= '/' . $key;
                 $url .= '/' . $value;
             }
