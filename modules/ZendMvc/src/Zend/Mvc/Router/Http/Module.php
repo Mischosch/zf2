@@ -22,16 +22,16 @@
 /**
  * @namespace
  */
-namespace Zf2Mvc\Router\Http;
+namespace Zend\Mvc\Router\Http;
 
-use Zf2Module\ModuleManagerOptions;
+use Zend\Module\ManagerOptions;
 
 use Traversable,
     Zend\Config\Config,
     Zend\Http\Request,
-    Zf2Mvc\Router\Exception,
-    Zf2Mvc\Router\Route,
-    Zf2Mvc\Router\RouteMatch;
+    Zend\Mvc\Router\Exception,
+    Zend\Mvc\Router\Route,
+    Zend\Mvc\Router\RouteMatch;
 
 /**
  * Module route.
