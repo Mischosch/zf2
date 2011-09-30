@@ -272,10 +272,15 @@ class Application implements AppContext
         $events     = $this->events();
         $routeMatch = $e->getRouteMatch();
 
+        $namespaceName  = $routeMatch->getParam('namespace', null);
         $controllerName = $routeMatch->getParam('controller', 'not-found');
 
         try {
-            $controller = $locator->get($controllerName);
+            if (!empty($namespaceName)) {
+                $controller = $locator->get($namespaceName . '-' . $controllerName);
+            } else {
+                $controller = $locator->get($controllerName);
+            }
         } catch (ClassNotFoundException $exception) {
             $error = clone $e;
             $error->setError(static::ERROR_CONTROLLER_NOT_FOUND)

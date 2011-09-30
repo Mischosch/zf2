@@ -149,6 +149,37 @@ class ApplicationTest extends TestCase
 
         return $app;
     }
+    
+    public function setupPathControllerWithNamespacesRouter()
+    {
+        $app = new Application();
+
+        $request = new Request();
+        $uri     = UriFactory::factory(
+            'http://example.local/application/index'
+        );
+        $request->setUri($uri);
+        $app->setRequest($request);
+
+        $route = new Router\Http\Namespaces(array(
+            'defaults' => array(
+                'namespace'  => 'application',
+                'controller' => 'index',
+                'action'     => 'index'
+            ),
+        ));
+        $router  = $app->getRouter();
+        $router->addRoute('namespace', $route);
+
+        $locator = new TestAsset\Locator();
+        $locator->add('application-index', function() {
+            return new TestAsset\PathController;
+        });
+        $app->setLocator($locator);
+
+
+        return $app;
+    }
 
     public function setupActionController()
     {
@@ -227,6 +258,15 @@ class ApplicationTest extends TestCase
     public function testControllerIsDispatchedDuringRun()
     {
         $app = $this->setupPathController();
+
+        $response = $app->run()->getResponse();
+        $this->assertContains('PathController', $response->getContent());
+        $this->assertContains('dispatch', $response->getContent());
+    }
+    
+    public function testControllerIsDispatchedDuringRunWithNamespaceAliases()
+    {
+        $app = $this->setupPathControllerWithNamespacesRouter();
 
         $response = $app->run()->getResponse();
         $this->assertContains('PathController', $response->getContent());
