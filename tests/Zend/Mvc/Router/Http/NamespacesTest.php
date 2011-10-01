@@ -84,7 +84,7 @@ class NamespacesTest extends TestCase
      */
     public function testMatches($assertion, $url)
     {
-        $router  = $this->setupRouter();
+        $router  = $this->setupRouter($assertion['namespace']);
         $request = $this->setupRequest($url);
         $matches = $router->match($request);
         $this->assertSame($assertion, $matches->getParams());
@@ -95,12 +95,15 @@ class NamespacesTest extends TestCase
     {
         return array(
             array(
-                'http://example.com/application'
+                'application',
+                'http://example.com/test/foo/bar',
             ), 
             array(
-                'http://example.com/project_add'
+                'project',
+                'http://example.com/project_add/index/index'
             ), 
             array(
+                'newsletter', 
                 'http://example.com/newsletter-user-password'
             ), 
         );
@@ -109,9 +112,9 @@ class NamespacesTest extends TestCase
     /**
      * @dataProvider invalidMatches
      */
-    public function testMatchErrors($url)
+    public function testMatchErrors($namespace, $url)
     {
-        $router  = $this->setupRouter();
+        $router  = $this->setupRouter($namespace);
         $request = $this->setupRequest($url);
         $matches = $router->match($request);
         $this->assertSame(null, $matches);
@@ -131,11 +134,12 @@ class NamespacesTest extends TestCase
     }
     
 
-    protected function setupRouter()
+    protected function setupRouter($namespace = 'application')
     {
         return new Namespaces(array(
+            'namespace' => $namespace, 
             'defaults' => array(
-                'namespace'  => 'application',
+                'namespace'  => $namespace,
                 'controller' => 'index', 
                 'action'     => 'index'
             )

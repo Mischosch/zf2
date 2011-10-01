@@ -55,6 +55,13 @@ class Namespaces implements Route
     protected $defaults;
     
     /**
+     * Given Namespace
+     *
+     * @var array
+     */
+    protected $namespace;
+    
+    /**
      * Matches
      * 
      * @var array
@@ -91,11 +98,16 @@ class Namespaces implements Route
             throw new Exception\InvalidArgumentException('Options must either be an array or a Traversable object');
         }
         
+        if (!isset($options['namespace']) || !is_string($options['namespace'])) {
+            throw new Exception\InvalidArgumentException('Namespace not defined nor not a string');
+        }
+        
         if (!isset($options['defaults']) || !is_array($options['defaults'])) {
             throw new Exception\InvalidArgumentException('Defaults not defined nor not an array');
         }
         
         $this->defaults = isset($options['defaults']) ? $options['defaults'] : array();
+        $this->namespace = isset($options['namespace']) ? $options['namespace'] : 'application';
     }
 
     /**
@@ -114,7 +126,7 @@ class Namespaces implements Route
             $path = trim($path, self::URI_DELIMITER);
             $path = explode(self::URI_DELIMITER, $path);
             
-            if (count($path) < 2) {
+            if ($path[0] != $this->namespace) {
                 return null;
             }
             
