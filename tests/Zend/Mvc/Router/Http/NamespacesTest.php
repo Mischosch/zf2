@@ -18,7 +18,7 @@ class NamespacesTest extends TestCase
     /**
      * @expectedException InvalidArgumentException
      */
-    public function testRouteWithoutDefaults()
+    public function testRouteWithoutOptions()
     {
         $route = new Namespaces();
     }
@@ -26,17 +26,17 @@ class NamespacesTest extends TestCase
     /**
      * @expectedException InvalidArgumentException
      */
-    public function testRouteWithStringDefaults()
+    public function testRouteWithEmptyOptionsArray()
     {
-        $route = new Namespaces('');
+        $route = new Namespaces(array());
     }
     
     /**
      * @expectedException InvalidArgumentException
      */
-    public function testRouteWithEmptyArrayDefaults()
+    public function testRouteWithStringDefaultsOption()
     {
-        $route = new Namespaces(array());
+        $route = new Namespaces(array('defaults' => ''));
     }
     
 
